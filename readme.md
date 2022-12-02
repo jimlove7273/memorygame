@@ -1,7 +1,5 @@
 # React MemoryGame
 
-This was from one of technical interviews where I was asked to render a list of Pokemons.
-
 **Notes:**
 This was one of the technical interview challenges where I was asked to create a memory game. The goal is to have the user select a game grid from 4x4 to 10x10, which a given number of hidden "blue" colored tiles. If 4x4, there would be 4 tiles, if 5x5, 5 tiles, etc. If the user selected a correct tile, it would turn blue. If the user selected a wrong tile, all blue tiles would turn back to gray. This goes on til all blue tiles are found.
 
