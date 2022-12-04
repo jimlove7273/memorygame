@@ -11,7 +11,7 @@ const GameTiles = ({ tiles, gameLength, clicked, tilesFound, checkTile }) => {
             onClick={() => checkTile(i)}
             disabled={gameLength - tilesFound <= 0}
           >
-            {tile}
+            {" "}
           </button>
         ))}
       </div>
