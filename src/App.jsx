@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "./App.css";
 
 import GameHeader from "../components/gameHeader";
 import GameScore from "../components/gameScore";
+import GameTiles from "../components/gameTiles";
 
 export default function App() {
   const [gameLength, setGameLength] = useState(4);
@@ -13,6 +14,10 @@ export default function App() {
   const [clicked, setClicked] = useState(tileclicked);
   const [tilesFound, setTilesFound] = useState(0);
 
+  /**
+   * * Function: setupTiles
+   * * This function takes the new or generated tiles (grid) and add tiles to be guessed (blue tiles) based on the grid size
+   */
   const setupTiles = () => {
     while (tiles.filter((tile) => tile === 1).length < gameLength) {
       let nextFilled = Math.floor(Math.random() * totalTiles);
@@ -20,13 +25,13 @@ export default function App() {
         tiles[nextFilled] = 1;
       }
     }
-    setTiles([...tiles]);
   };
+  setupTiles();
 
-  useEffect(() => {
-    setupTiles();
-  }, [gameLength, tiles]);
-
+  /**
+   * * Function: gameGridChange
+   * * This function runs when the user selects a new grid size
+   */
   const gameGridChange = (e) => {
     let value = e.target.value.split("x");
     let totalTiles = value[0] * value[0];
@@ -35,8 +40,14 @@ export default function App() {
     setTiles([...tilesgrid]);
     setClicked([...tileclicked]);
     setGameLength(value[0]);
+    setTilesFound(0);
   };
 
+  /**
+   * * Function checkTile
+   * * This function runs when the player clicks any of the tiles, it checks if it's a pre-selected/blue tile, if so,
+   * * it's turned to blue.  Otherwise, it resets everything back to gray tiles.
+   */
   const checkTile = (i) => {
     if (tiles[i] === 1 && clicked[i] === 0) {
       setTilesFound((prev) => prev + 1);
@@ -47,20 +58,27 @@ export default function App() {
     }
   };
 
+  /**
+   * * Function: resetGame
+   * * When you click an incorrect tile (not a blue tile), this resets everything back to gray tiles and start over
+   */
   const resetGame = () => {
     let tileclicked = new Array(totalTiles).fill(0);
     setClicked([...tileclicked]);
     setTilesFound(0);
   };
 
+  /**
+   * * Function: newGame
+   * * This function creates a new game and resets everything including the scoring and tiles selected
+   */
   const newGame = () => {
-    setGameLength(4);
-    let totalTiles = 16;
     let tilesgrid = new Array(totalTiles).fill(0);
     let tileclicked = new Array(totalTiles).fill(0);
     setTiles([...tilesgrid]);
     setClicked([...tileclicked]);
     setTilesFound(0);
+    setupTiles();
   };
 
   return (
@@ -74,20 +92,13 @@ export default function App() {
 
         <GameScore tilesFound={tilesFound} gameLength={gameLength} />
 
-        <div className="game">
-          <div className={`game-grid g${gameLength}`}>
-            {tiles.map((tile, i) => (
-              <button
-                key={i}
-                className={`game-tile ${clicked[i] === 1 ? "blue" : ""}`}
-                onClick={() => checkTile(i)}
-                disabled={gameLength - tilesFound <= 0}
-              >
-                {" "}
-              </button>
-            ))}
-          </div>
-        </div>
+        <GameTiles
+          tiles={tiles}
+          gameLength={gameLength}
+          clicked={clicked}
+          tilesFound={tilesFound}
+          checkTile={checkTile}
+        />
       </div>
     </div>
   );

@@ -5,7 +5,12 @@ const GameHeader = ({ gameGridChange, newGame, resetGame }) => {
     <div className="game-header">
       <button onClick={() => newGame()}>New Game</button>
       <div>
-        <select name="game-size" onChange={gameGridChange} defaultValue="4x4">
+        <select
+          id="game-size"
+          name="game-size"
+          onChange={gameGridChange}
+          defaultValue="4x4"
+        >
           <option>4x4</option>
           <option>5x5</option>
           <option>6x6</option>
